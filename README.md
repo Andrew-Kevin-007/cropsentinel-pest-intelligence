@@ -43,20 +43,24 @@ Example:
 
 The training notebook or script should use the same resize and normalization pipeline as inference.
 
-To train from an ImageFolder-compatible IP102 export:
+Prepare the official IP102 classification archive first:
 
 ```powershell
 py -m pip install -r requirements-ml.txt
-py train.py --data-dir path\to\IP102 --epochs 12 --output-dir models
+py prepare_ip102.py --archive data\raw\ip102\Classification\ip102_v1.1.tar --output-dir data\processed\ip102
+py train.py --data-dir data\processed\ip102 --epochs 12 --output-dir models
+py evaluate.py --data-dir data\processed\ip102 --model models\efficientnet_ip102.pt
 ```
 
-The dataset folder must contain `train/` and `val/` directories. The script saves the best TorchScript checkpoint and `class_names.json` under `models/`.
+The preparation script extracts the official archive, maps its split files into ImageFolder directories, and preserves the 102-class label mapping. Training saves the best TorchScript checkpoint and `class_names.json`; evaluation writes `reports/evaluation.json` with accuracy, macro F1, per-class metrics, and a confusion matrix.
 
 ## Project structure
 
 ```text
 app.py
 train.py
+prepare_ip102.py
+evaluate.py
 data/recommendations.json
 models/                 # optional trained checkpoint
 requirements.txt
