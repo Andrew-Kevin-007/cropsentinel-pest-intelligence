@@ -62,6 +62,7 @@ def export_split(records: list[tuple[str, int]], source_root: Path, output_root:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Prepare IP102 for CropSentinel training")
     parser.add_argument("--archive", type=Path, required=True)
+    parser.add_argument("--classes", type=Path, default=None, help="Path to the companion classes.txt file")
     parser.add_argument("--output-dir", type=Path, default=Path("data/processed/ip102"))
     args = parser.parse_args()
     extract_dir = args.output_dir.parent / "ip102_extracted"
@@ -69,7 +70,8 @@ def main() -> None:
     if not any(extract_dir.iterdir()):
         with tarfile.open(args.archive) as archive:
             archive.extractall(extract_dir)
-    classes = read_classes(find_file(extract_dir, "classes.txt"))
+    classes_path = args.classes or args.archive.with_name("classes.txt")
+    classes = read_classes(classes_path if classes_path.exists() else find_file(extract_dir, "classes.txt"))
     image_root = next((path for path in [extract_dir / "images", extract_dir / "Image", extract_dir / "JPEGImages"] if path.exists()), extract_dir)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     summary = {}

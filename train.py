@@ -12,6 +12,9 @@ def main() -> None:
     parser.add_argument("--data-dir", type=Path, required=True, help="Folder containing train/ and val/ ImageFolder directories")
     parser.add_argument("--epochs", type=int, default=12)
     parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument("--limit-per-class", type=int, default=0, help="Optional smoke-test limit for training images per class")
+    parser.add_argument("--limit-val", type=int, default=0, help="Optional smoke-test limit for validation images")
+    parser.add_argument("--no-pretrained", action="store_true", help="Skip pretrained weights for an offline smoke test")
     parser.add_argument("--output-dir", type=Path, default=Path("models"))
     args = parser.parse_args()
 
@@ -31,11 +34,24 @@ def main() -> None:
     normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     train_data = datasets.ImageFolder(train_dir, transforms.Compose([transforms.Resize((224, 224)), transforms.RandomHorizontalFlip(), transforms.RandomRotation(10), transforms.ToTensor(), normalize]))
     val_data = datasets.ImageFolder(val_dir, transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), normalize]))
-    train_loader = DataLoader(train_data, batch_size=args.batch_size, shuffle=True, num_workers=0)
-    val_loader = DataLoader(val_data, batch_size=args.batch_size, shuffle=False, num_workers=0)
+    train_source = train_data
+    if args.limit_per_class > 0:
+        selected = []
+        counts = {label: 0 for label in range(len(train_data.classes))}
+        for index, label in enumerate(train_data.targets):
+            if counts[label] < args.limit_per_class:
+                selected.append(index)
+                counts[label] += 1
+        train_source = torch.utils.data.Subset(train_data, selected)
+        print(f"smoke-test subset: {len(train_source)} images")
+    train_loader = DataLoader(train_source, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    val_source = val_data
+    if args.limit_val > 0:
+        val_source = torch.utils.data.Subset(val_data, list(range(min(args.limit_val, len(val_data)))))
+    val_loader = DataLoader(val_source, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    weights = models.EfficientNet_B0_Weights.DEFAULT
+    weights = None if args.no_pretrained else models.EfficientNet_B0_Weights.DEFAULT
     model = models.efficientnet_b0(weights=weights)
     model.classifier[1] = nn.Linear(model.classifier[1].in_features, len(train_data.classes))
     model.to(device)

@@ -12,6 +12,7 @@ def main() -> None:
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--model", type=Path, default=Path("models/efficientnet_ip102.pt"))
     parser.add_argument("--output", type=Path, default=Path("reports/evaluation.json"))
+    parser.add_argument("--limit", type=int, default=0, help="Optional smoke-test limit for test images")
     args = parser.parse_args()
     try:
         import torch
@@ -22,6 +23,8 @@ def main() -> None:
         raise SystemExit("Install ML extras: python -m pip install -r requirements-ml.txt") from error
     normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     dataset = datasets.ImageFolder(args.data_dir / "test", transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), normalize]))
+    if args.limit > 0:
+        dataset = torch.utils.data.Subset(dataset, list(range(min(args.limit, len(dataset)))))
     loader = DataLoader(dataset, batch_size=32, shuffle=False, num_workers=0)
     model = torch.jit.load(str(args.model), map_location="cpu").eval()
     actual, predicted = [], []
@@ -29,7 +32,8 @@ def main() -> None:
         for images, labels in loader:
             predicted.extend(model(images).argmax(1).tolist())
             actual.extend(labels.tolist())
-    report = {"samples": len(actual), "classes": dataset.classes, "accuracy": accuracy_score(actual, predicted), "macro_f1": f1_score(actual, predicted, average="macro", zero_division=0), "classification_report": classification_report(actual, predicted, target_names=dataset.classes, output_dict=True, zero_division=0), "confusion_matrix": confusion_matrix(actual, predicted).tolist()}
+    classes = dataset.dataset.classes if isinstance(dataset, torch.utils.data.Subset) else dataset.classes
+    report = {"samples": len(actual), "classes": classes, "accuracy": accuracy_score(actual, predicted), "macro_f1": f1_score(actual, predicted, average="macro", zero_division=0), "classification_report": classification_report(actual, predicted, labels=list(range(len(classes))), target_names=classes, output_dict=True, zero_division=0), "confusion_matrix": confusion_matrix(actual, predicted).tolist()}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"accuracy={report['accuracy']:.4f} macro_f1={report['macro_f1']:.4f} samples={report['samples']}")
