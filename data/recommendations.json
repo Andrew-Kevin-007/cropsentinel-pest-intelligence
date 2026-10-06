@@ -1,0 +1,42 @@
+{
+  "aphids": {
+    "name": "Aphids",
+    "scientific_name": "Aphidoidea (superfamily)",
+    "crop": "Vegetables · fruit · ornamentals",
+    "prevent": ["Inspect leaf undersides weekly.", "Control weeds around the crop.", "Avoid excessive nitrogen that encourages soft growth."],
+    "organic": ["Use a strong water spray on colonies.", "Encourage ladybirds and lacewings.", "Use insecticidal soap or horticultural oil only as labelled."],
+    "chemical": ["Use only a locally approved aphid product if monitoring shows treatment is necessary.", "Protect flowering plants and pollinators; follow the label."],
+    "field_note": "Clusters on new growth and sticky honeydew are useful clues, but several insects can look similar in a single photo.",
+    "source": "Verify with local extension guidance and the product label."
+  },
+  "fall armyworm": {
+    "name": "Fall armyworm",
+    "scientific_name": "Spodoptera frugiperda",
+    "crop": "Maize · grasses · vegetables",
+    "prevent": ["Scout whorls and leaf surfaces early.", "Remove volunteer plants and crop residue where appropriate.", "Use crop rotation and field sanitation."],
+    "organic": ["Hand-pick small infestations where practical.", "Use approved biological products based on Bt or beneficial organisms.", "Support natural enemies by avoiding unnecessary broad-spectrum sprays."],
+    "chemical": ["Use an approved product only after confirming the pest and local threshold.", "Rotate modes of action to reduce resistance risk."],
+    "field_note": "Look for window-pane feeding and frass deep in the plant whorl; confirm before treatment.",
+    "source": "Verify with local crop protection guidance and the product label."
+  },
+  "beet armyworm": {
+    "name": "Beet armyworm",
+    "scientific_name": "Spodoptera exigua",
+    "crop": "Leafy vegetables · legumes · ornamentals",
+    "prevent": ["Scout young leaves and plant margins.", "Remove crop debris after harvest.", "Use physical barriers for small plots."],
+    "organic": ["Remove egg masses and larvae by hand in small areas.", "Use approved microbial controls where suitable.", "Encourage parasitoids and predators."],
+    "chemical": ["Choose only a locally registered option and follow its label.", "Avoid repeated use of the same mode of action."],
+    "field_note": "Larval colour varies, so feeding pattern and crop context matter as much as appearance.",
+    "source": "Verify with local crop protection guidance and the product label."
+  },
+  "unknown": {
+    "name": "Uncertain field observation",
+    "scientific_name": "Insufficient visual evidence",
+    "crop": "Upload a clearer image",
+    "prevent": ["Retake the photo in natural light.", "Include the insect and the damage pattern.", "Capture the underside of leaves if possible."],
+    "organic": ["Avoid treatment until the pest is confirmed.", "Isolate heavily affected plant material where practical."],
+    "chemical": ["Do not apply chemical control from an uncertain prediction.", "Ask a local agricultural expert for confirmation."],
+    "field_note": "The safest recommendation when confidence is low is better evidence, not stronger treatment.",
+    "source": "General responsible-use guidance."
+  }
+}

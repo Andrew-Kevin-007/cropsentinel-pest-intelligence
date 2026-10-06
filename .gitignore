@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.pytest_cache/
+.streamlit/secrets.toml
+data/raw/
+data/IP102/
+models/*.pt
+models/*.pth
+models/*.onnx
+*.zip
+*.tar.gz
