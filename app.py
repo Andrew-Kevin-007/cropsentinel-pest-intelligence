@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -57,6 +58,7 @@ def show_metric(label: str, value: str, accent: str) -> None:
     st.markdown(f'<div class="metric"><div class="metric-label">{label}</div><div class="metric-value" style="color:{accent}">{value}</div></div>', unsafe_allow_html=True)
 
 recommendations = load_recommendations()
+st.session_state.setdefault("history", [])
 
 st.markdown("""
 <style>
@@ -99,10 +101,19 @@ with st.sidebar:
     st.caption("A student-built pest intelligence prototype")
     st.divider()
     st.markdown("**Model status**")
-    if MODEL_PATH.exists():
+    if load_model() is not None:
         st.success("EfficientNet checkpoint loaded")
     else:
         st.info("Demo mode active")
+    st.metric("Saved observations", len(st.session_state["history"]))
+    if st.session_state["history"]:
+        st.download_button(
+            "Export observation log",
+            json.dumps(st.session_state["history"], indent=2),
+            "cropsentinel-observations.json",
+            "application/json",
+            use_container_width=True,
+        )
     st.markdown("**Workflow**")
     st.markdown("1. Upload a clear image\n2. Inspect the confidence\n3. Start with the lowest-risk action")
     st.divider()
@@ -128,6 +139,14 @@ with result_col:
     if uploaded and analyze:
         pest_key, confidence, model_source = predict(image)
         st.session_state["last_prediction"] = (pest_key, confidence, model_source)
+        st.session_state["history"].insert(0, {
+            "timestamp": datetime.now().isoformat(timespec="seconds"),
+            "filename": uploaded.name,
+            "pest": pest_key,
+            "confidence": confidence,
+            "source": model_source,
+        })
+        st.session_state["history"] = st.session_state["history"][:20]
     prediction = st.session_state.get("last_prediction")
     if prediction:
         pest_key, confidence, model_source = prediction
