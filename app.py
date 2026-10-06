@@ -166,7 +166,7 @@ with result_col:
     if prediction:
         pest_key, confidence, model_source = prediction
         pest = get_pest_profile(pest_key)
-        st.markdown(f"<span class='tag'>{model_source}</span><span class='tag'>{pest['crop']}</span>", unsafe_allow_html=True)
+        st.markdown(f"<span class='tag'>{model_source}</span><span class='tag'>Model label: {pest_key}</span><span class='tag'>{pest['crop']}</span>", unsafe_allow_html=True)
         st.subheader(pest["name"])
         st.caption(pest["scientific_name"])
         m1, m2 = st.columns(2)
