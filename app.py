@@ -60,6 +60,16 @@ def show_metric(label: str, value: str, accent: str) -> None:
 recommendations = load_recommendations()
 st.session_state.setdefault("history", [])
 
+def get_pest_profile(model_key: str) -> dict[str, Any]:
+    profile = recommendations.get(model_key)
+    if profile:
+        return profile
+    label = model_key.lower()
+    caterpillar_terms = ("caterpillar", "armyworm", "cutworm", "borer", "leaf_roller", "leaf roller", "worm")
+    if any(term in label for term in caterpillar_terms):
+        return recommendations.get("caterpillar") or recommendations["unknown"]
+    return recommendations["unknown"]
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -155,7 +165,7 @@ with result_col:
     prediction = st.session_state.get("last_prediction")
     if prediction:
         pest_key, confidence, model_source = prediction
-        pest = recommendations.get(pest_key, recommendations["unknown"])
+        pest = get_pest_profile(pest_key)
         st.markdown(f"<span class='tag'>{model_source}</span><span class='tag'>{pest['crop']}</span>", unsafe_allow_html=True)
         st.subheader(pest["name"])
         st.caption(pest["scientific_name"])
@@ -174,7 +184,7 @@ with result_col:
 
 if prediction:
     pest_key, confidence, _ = prediction
-    pest = recommendations.get(pest_key, recommendations["unknown"])
+    pest = get_pest_profile(pest_key)
     st.divider()
     st.markdown("## 03 / Recommended action")
     st.caption("The action ladder starts with prevention and targeted, lower-impact options before chemical control.")

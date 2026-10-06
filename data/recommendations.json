@@ -29,6 +29,16 @@
     "field_note": "Larval colour varies, so feeding pattern and crop context matter as much as appearance.",
     "source": "Verify with local crop protection guidance and the product label."
   },
+  "caterpillar": {
+    "name": "Caterpillar-type pest",
+    "scientific_name": "Exact species requires visual verification",
+    "crop": "Vegetables · maize · fruit · ornamentals",
+    "prevent": ["Scout leaves and growing points early in the morning.", "Check leaf undersides and look for frass, webbing, or fresh chewing damage.", "Remove weeds and crop residue that can shelter larvae."],
+    "organic": ["Hand-pick visible larvae and egg masses where practical.", "Use an approved Bt-based biological control on young caterpillars, following the local label.", "Protect birds, parasitoids, and other natural enemies by avoiding unnecessary broad-spectrum sprays."],
+    "chemical": ["Do not choose a product from this low-confidence category alone; confirm the species and crop first.", "If treatment is justified, use only a locally registered product, follow its label, and rotate modes of action to reduce resistance."],
+    "field_note": "The image suggests a caterpillar-like pest category, but species-level identification is uncertain. Look for the crop, feeding pattern, frass, and body markings before treatment.",
+    "source": "General integrated-pest-management guidance; verify with local agricultural extension advice and the product label."
+  },
   "unknown": {
     "name": "Uncertain field observation",
     "scientific_name": "Insufficient visual evidence",
