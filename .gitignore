@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 venv/
 .env
+.pip-cache/
 .pytest_cache/
 .streamlit/secrets.toml
 data/raw/
