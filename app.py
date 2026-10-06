@@ -135,7 +135,6 @@ with st.sidebar:
 
 upload_col, result_col = st.columns([1.04, 1], gap="large")
 with upload_col:
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
     st.markdown("### 01 / Capture the signal")
     uploaded = st.file_uploader("Upload a pest image", type=["jpg", "jpeg", "png", "webp"], label_visibility="collapsed")
     if uploaded:
@@ -145,10 +144,8 @@ with upload_col:
     else:
         st.info("Best results come from a well-lit, close-up image with the insect in focus.")
         analyze = False
-    st.markdown('</div>', unsafe_allow_html=True)
 
 with result_col:
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
     st.markdown("### 02 / Read the signal")
     if uploaded and analyze:
         pest_key, confidence, model_source = predict(image)
@@ -180,7 +177,6 @@ with result_col:
         st.caption("A high score is not a guarantee of field-level identification.")
     else:
         st.markdown("<div style='padding:4rem 1rem;text-align:center;color:#718178'><div style='font-size:3rem'>⌁</div><b>Your identification will appear here</b><br><small>One photo in. A safer next step out.</small></div>", unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 if prediction:
     pest_key, confidence, _ = prediction
@@ -191,11 +187,9 @@ if prediction:
     action_cols = st.columns(3, gap="medium")
     for column, title, icon, items in zip(action_cols, ["Observe & prevent", "Organic / biological", "Chemical, only if needed"], ["◌", "✳", "△"], [pest["prevent"], pest["organic"], pest["chemical"]]):
         with column:
-            st.markdown('<div class="panel">', unsafe_allow_html=True)
             st.markdown(f"### {icon} {title}")
             for item in items:
                 st.markdown(f"- {item}")
-            st.markdown('</div>', unsafe_allow_html=True)
     st.markdown(f"**Field note:** {pest['field_note']}")
     st.caption(f"Recommendation source: {pest['source']}")
     st.markdown('<div class="warning"><b>Safety boundary:</b> This prototype does not prescribe a product, dose, or application schedule. Always follow the local product label and consult an agricultural professional.</div>', unsafe_allow_html=True)
