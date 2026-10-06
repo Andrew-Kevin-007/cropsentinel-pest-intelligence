@@ -151,6 +151,7 @@ with result_col:
             "source": model_source,
         })
         st.session_state["history"] = st.session_state["history"][:20]
+        st.rerun()
     prediction = st.session_state.get("last_prediction")
     if prediction:
         pest_key, confidence, model_source = prediction

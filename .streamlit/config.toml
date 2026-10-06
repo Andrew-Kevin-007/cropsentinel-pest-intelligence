@@ -15,3 +15,10 @@ backgroundColor = "#f4f5ec"
 secondaryBackgroundColor = "#e8eee1"
 textColor = "#13231d"
 font = "sans serif"
+
+[theme.sidebar]
+primaryColor = "#1d6b4b"
+backgroundColor = "#e7eef7"
+secondaryBackgroundColor = "#dbe7ef"
+textColor = "#04070e"
+font = "sans serif"
