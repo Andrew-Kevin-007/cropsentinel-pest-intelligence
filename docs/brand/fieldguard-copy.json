@@ -1,0 +1,19 @@
+{
+  "brand": "FieldGuard",
+  "tagline": "Calm, evidence-aware field observation.",
+  "headlines": [
+    "Observe the field with confidence.",
+    "Turn a photo into a clearer next step.",
+    "Learn what to look for in the field.",
+    "Evidence for the next field walk.",
+    "Start with an observation."
+  ],
+  "empty_states": [
+    "No observation yet. Add a clear field photo to begin; results are educational clues, not a confirmed diagnosis.",
+    "We could not read that image. Try a brighter, closer photo with the subject in focus.",
+    "No close match found. Record the field clues and confirm the finding with a qualified local source.",
+    "History is empty. Your saved observations will appear here; avoid uploading personal or identifying information.",
+    "Guidance is unavailable. Continue with non-chemical inspection and follow authoritative local advice before taking action."
+  ],
+  "safety_notice": "FieldGuard provides educational observation support, not a confirmed diagnosis or pesticide prescription. Confirm findings with authoritative local guidance and follow product labels where applicable."
+}
