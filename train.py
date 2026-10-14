@@ -21,7 +21,7 @@ def main() -> None:
     try:
         import torch
         from torch import nn
-        from torch.utils.data import DataLoader
+        from torch.utils.data import DataLoader, WeightedRandomSampler
         from torchvision import datasets, models, transforms
     except ImportError as error:
         raise SystemExit("Install the ML extras first: python -m pip install -r requirements-ml.txt") from error
@@ -44,7 +44,13 @@ def main() -> None:
                 counts[label] += 1
         train_source = torch.utils.data.Subset(train_data, selected)
         print(f"smoke-test subset: {len(train_source)} images")
-    train_loader = DataLoader(train_source, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    source_indices = list(range(len(train_data))) if train_source is train_data else list(train_source.indices)
+    class_counts = {label: 0 for label in range(len(train_data.classes))}
+    for index in source_indices:
+        class_counts[train_data.targets[index]] += 1
+    sample_weights = [1.0 / max(class_counts[train_data.targets[index]], 1) for index in source_indices]
+    sampler = WeightedRandomSampler(sample_weights, num_samples=len(sample_weights), replacement=True)
+    train_loader = DataLoader(train_source, batch_size=args.batch_size, sampler=sampler, num_workers=0)
     val_source = val_data
     if args.limit_val > 0:
         val_source = torch.utils.data.Subset(val_data, list(range(min(args.limit_val, len(val_data)))))

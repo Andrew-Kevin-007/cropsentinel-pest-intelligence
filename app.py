@@ -60,13 +60,13 @@ def show_metric(label: str, value: str, accent: str) -> None:
 recommendations = load_recommendations()
 st.session_state.setdefault("history", [])
 
-def get_pest_profile(model_key: str) -> dict[str, Any]:
+def get_pest_profile(model_key: str, confidence: float) -> dict[str, Any]:
     profile = recommendations.get(model_key)
     if profile:
         return profile
     label = model_key.lower()
     caterpillar_terms = ("caterpillar", "armyworm", "cutworm", "borer", "leaf_roller", "leaf roller", "worm")
-    if any(term in label for term in caterpillar_terms):
+    if confidence >= 0.20 and any(term in label for term in caterpillar_terms):
         return recommendations.get("caterpillar") or recommendations["unknown"]
     return recommendations["unknown"]
 
@@ -162,7 +162,7 @@ with result_col:
     prediction = st.session_state.get("last_prediction")
     if prediction:
         pest_key, confidence, model_source = prediction
-        pest = get_pest_profile(pest_key)
+        pest = get_pest_profile(pest_key, confidence)
         st.markdown(f"<span class='tag'>{model_source}</span><span class='tag'>Model label: {pest_key}</span><span class='tag'>{pest['crop']}</span>", unsafe_allow_html=True)
         st.subheader(pest["name"])
         st.caption(pest["scientific_name"])
@@ -180,7 +180,7 @@ with result_col:
 
 if prediction:
     pest_key, confidence, _ = prediction
-    pest = get_pest_profile(pest_key)
+    pest = get_pest_profile(pest_key, confidence)
     st.divider()
     st.markdown("## 03 / Recommended action")
     st.caption("The action ladder starts with prevention and targeted, lower-impact options before chemical control.")

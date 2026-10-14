@@ -10,6 +10,7 @@ from pathlib import Path
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate CropSentinel checkpoint")
     parser.add_argument("--data-dir", type=Path, required=True)
+    parser.add_argument("--split", default="test", choices=["train", "val", "test"])
     parser.add_argument("--model", type=Path, default=Path("models/efficientnet_ip102.pt"))
     parser.add_argument("--output", type=Path, default=Path("reports/evaluation.json"))
     parser.add_argument("--limit", type=int, default=0, help="Optional smoke-test limit for test images")
@@ -22,7 +23,7 @@ def main() -> None:
     except ImportError as error:
         raise SystemExit("Install ML extras: python -m pip install -r requirements-ml.txt") from error
     normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    dataset = datasets.ImageFolder(args.data_dir / "test", transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), normalize]))
+    dataset = datasets.ImageFolder(args.data_dir / args.split, transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(), normalize]))
     if args.limit > 0:
         dataset = torch.utils.data.Subset(dataset, list(range(min(args.limit, len(dataset)))))
     loader = DataLoader(dataset, batch_size=32, shuffle=False, num_workers=0)
