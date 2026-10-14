@@ -17,7 +17,7 @@ py -m pip install -r requirements.txt
 py -m streamlit run app.py
 ```
 
-The app runs immediately in **demo mode** when no checkpoint is available. Demo predictions use a transparent image heuristic and are labelled in the interface. To run with the local ML environment and checkpoint, use `\.venv\Scripts\python.exe -m streamlit run app.py`.
+The app runs immediately  in **demo mode** when no checkpoint is available. Demo predictions use a transparent image heuristic and are labelled in the interface. To run with the local ML environment and checkpoint, use `\.venv\Scripts\python.exe -m streamlit run app.py`.
 
 ## Production container
 
@@ -41,7 +41,7 @@ Example:
 {"0": "000_rice_leaf_roller", "1": "001_rice_leaf_caterpillar"}
 ```
 
-The training notebook or script should use the same resize and normalization pipeline as inference.
+The training notebook or script should  use the same resize and normalization pipeline as inference.
 
 Prepare the official IP102 classification archive first:
 
