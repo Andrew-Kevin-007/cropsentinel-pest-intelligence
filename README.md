@@ -12,7 +12,8 @@ CropSentinel is a deployable pest-intelligence dashboard for image-based insect 
 ## Run the demo
 
 ```powershell
-cd d:\ITA
+git clone https://github.com/Andrew-Kevin-007/cropsentinel-pest-intelligence.git
+cd cropsentinel-pest-intelligence
 py -m pip install -r requirements.txt
 py -m streamlit run app.py
 ```
